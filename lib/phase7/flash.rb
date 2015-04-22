@@ -1,16 +1,17 @@
 require_relative '../phase6/controller_base'
 module Phase7
   class Flash < Phase6::ControllerBase
+    attr_accessor :flash
     def initialize(key, val)
-      @flash = WEBrick::Cookie.new(key, val)
+      @flash[key] = val
+    end
+
+    def called?
+
     end
 
     def [](key)
-
-    end
-
-    def []=(key,value)
-
+      flash[key]
     end
 
     def now
