@@ -42,21 +42,16 @@ module Phase5
       in_arr.each do |pair|
         parsed_key = parse_key(pair.first)
         value = pair.last
-
-        str_json = ""
-        num_times = 0
-
-        parsed_key.each do |key|
-          str_json+= "{'#{key}'=>"
-          str_json+= "'#{value}'" if key==parsed_key.last
-          num_times += 1
-        end
-        str_json += "}"*num_times
-        parsed_hash = JSON.parse(str_json.gsub("'",'"').gsub('=>',':'))
-        parsed_hash.each do |key, val|
-          @params[key] = val
-        end
+        full_arr = parsed_key + [value]
+        nested_hash = nest_hash(full_arr)
+        @params[nested_hash.keys.first] = nested_hash.values.first
       end
+    end
+
+    def nest_hash(arr)
+      return arr.first if arr.length == 1
+
+      { arr.shift => nest_hash(arr)}
     end
 
     # this should return an array
